@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Quiet Attraction System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #ffffff;
+        --alt-bg: #f8faff;
+        --text: #111827;
+        --secondary: #5b6576;
+        --blue: #2563eb;
+        --cta: #1d4ed8;
+        --border: #e6ebf5;
+        --radius: 14px;
+        --shadow: 0 10px 28px rgba(20, 32, 65, 0.08);
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.65;
+      }
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 10% 8%, rgba(37, 99, 235, 0.08) 0, transparent 36%),
+          radial-gradient(circle at 88% 14%, rgba(29, 78, 216, 0.07) 0, transparent 32%);
+      }
+      .section { padding: 60px 20px; }
+      .alt { background: var(--alt-bg); }
+      .container { width: min(100%, 1060px); margin: 0 auto; }
+      .text-wrap { width: min(100%, 700px); margin: 0 auto; }
+      h1 { margin: 0; font-size: clamp(27px, 7vw, 46px); line-height: 1.2; }
+      h2 { margin: 0 0 14px; font-size: clamp(24px, 6vw, 36px); line-height: 1.3; }
+      h3 { margin: 0 0 8px; font-size: clamp(20px, 4.5vw, 24px); }
+      p, li { margin: 0; font-size: 17px; color: var(--secondary); }
+      .stack > * + * { margin-top: 14px; }
+      .preheadline { font-size: 16px; color: var(--secondary); font-weight: 500; margin-bottom: 12px; }
+      .hero { text-align: center; }
+      .cta {
+        width: 100%;
+        max-width: 430px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        background: var(--cta);
+        color: #fff;
+        padding: 16px 22px;
+        border-radius: var(--radius);
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 20px;
+        transition: background .2s ease, transform .2s ease;
+      }
+      .cta:hover { background: #1e40af; transform: translateY(-1px); }
+      .ticks { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+      .tick { font-size: 15px; color: #1f2937; border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 7px 12px; }
+      .hero-image { margin: 24px auto 0; max-width: 560px; }
+      .hero-image img { width: 100%; display: block; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+      .grid { display: grid; gap: 16px; }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        background: #fff;
+        box-shadow: var(--shadow);
+      }
+      .card strong { color: var(--text); }
+      .two { grid-template-columns: 1fr; }
+      .modules .card { padding: 16px 18px; }
+      .value-table { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); background: #fff; }
+      .value-row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #edf1f7; }
+      .value-row:last-child { border-bottom: none; }
+      .value-row span:last-child { white-space: nowrap; }
+      .total { font-size: 20px; font-weight: 700; color: var(--text); }
+      .faq details { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: #fff; }
+      .faq details + details { margin-top: 10px; }
+      .faq summary { cursor: pointer; color: #1f2937; font-weight: 700; }
+      .image-grid { display: grid; gap: 16px; margin-top: 20px; }
+      .image-grid img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); aspect-ratio: 16/9; object-fit: cover; }
+      .checklist { list-style: none; padding: 0; margin: 0; }
+      .checklist li { padding-left: 24px; position: relative; margin-bottom: 10px; }
+      .checklist li::before { content: '✓'; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+      .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .sticky { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 20; }
+      .sticky .cta { max-width: none; margin: 0; box-shadow: 0 12px 30px rgba(29, 78, 216, 0.3); }
+      .center { text-align: center; }
+
+      @media (min-width: 768px) {
+        .section { padding: 76px 28px; }
+        .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .image-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .sticky { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="section hero reveal">
+        <div class="container text-wrap stack">
+          <p class="preheadline">For shy Indian men who feel unseen around women</p>
+          <h1>How shy Indian men can naturally attract women without pretending to be confident</h1>
+          <p>If you are a quiet guy who gets ignored by girls while others attract them easily, this page is for you.</p>
+          <p>You do not need looks, money, or a loud personality. Attraction is a skill. And yes, even quiet men can learn it.</p>
+          <p>Forget pickup lines, fake alpha advice, loud confidence acts, and dating tips that feel uncomfortable or unnatural. This step by step system shows shy men how attraction actually works in real life, in Indian social settings, without changing who you are.</p>
+          <a class="cta" href="#checkout">Show Me The System</a>
+          <div class="ticks">
+            <span class="tick">✓ Lifetime Access</span>
+            <span class="tick">✓ Instant Download</span>
+          </div>
+        </div>
+        <figure class="hero-image">
+          <img src="https://images.unsplash.com/photo-1587440871875-191322ee64b0?auto=format&fit=crop&w=1200&q=80" alt="3D digital course box mockup on clean white background" loading="lazy" />
+        </figure>
+      </section>
+
+      <section class="section alt reveal">
+        <div class="container">
+          <div class="text-wrap stack">
+            <h2>Learn how to naturally get attention from women instead of being ignored.</h2>
+            <p>With a simple, realistic approach made for shy men, you will learn how to:</p>
+          </div>
+          <div class="grid two" style="margin-top:24px">
+            <article class="card">1. Walk into conversations feeling relaxed instead of nervous</article>
+            <article class="card">2. Make women feel easy and comfortable talking to you</article>
+            <article class="card">3. Keep chats going without forcing jokes or lines</article>
+            <article class="card">4. Get better replies and interest without trying too hard</article>
+            <article class="card">5. Feel sure about what you are doing instead of guessing</article>
+            <article class="card">6. Stop overthinking small moments and stay present</article>
+            <article class="card">7. Let attraction grow naturally without acting confident</article>
+            <article class="card">8. Handle silence calmly without feeling awkward</article>
+            <article class="card">9. Feel ready to talk to women anytime, anywhere</article>
+            <article class="card">10. Enjoy talking to women instead of stressing about it</article>
+          </div>
+          <div class="image-grid">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80" alt="Realistic Indian men lifestyle conversation in cafe" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="Laptop and phone showing minimal digital course interface" loading="lazy" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="container">
+          <div class="text-wrap"><h2>What Men Are Saying</h2></div>
+          <div class="grid two" style="margin-top:24px">
+            <article class="card"><p><strong>Arjun K.</strong><br/>⭐⭐⭐⭐⭐</p><p>“I’m 27 and always been the quiet guy. Not bad looking, decent job, but girls just didn’t see me that way. I would match on apps but conversations died fast. This system helped me understand small things I was doing wrong — over-texting, being too available, acting impressed too easily. I made some changes and within a few weeks I went on multiple dates. I ended up sleeping with one girl I met through an app. For the first time I felt like I wasn’t just the ‘nice guy.’”</p></article>
+            <article class="card"><p><strong>Rishabh T.</strong><br/>⭐⭐⭐⭐☆</p><p>“I’m an introvert and I overthink a lot. My biggest issue was confidence during dates. I would talk too much or go completely silent. What helped me most was learning how to stay calm and slow things down. Eye contact, physical touch at the right time, not rushing. I’ve had two hookups in the last few months. That’s more than my entire previous life combined. It actually works if you apply it.”</p></article>
+            <article class="card"><p><strong>Manav S.</strong><br/>⭐⭐⭐⭐⭐</p><p>“I used to get friend-zoned every single time. Girls liked talking to me but nothing physical ever happened. I didn’t know how to escalate without feeling awkward. The Quiet Attraction System explains things in a practical way. No cringe pickup lines. Just how to create tension naturally. I tried it with a girl I had known for months. We went from casual chatting to hooking up in about 3 weeks. I didn’t become someone else. I just stopped being scared to lead.”</p></article>
+            <article class="card"><p><strong>Dev A.</strong><br/>⭐⭐⭐⭐☆</p><p>“Earlier I thought you need money, looks, or extrovert personality. I had none of that. The biggest change for me was mindset. Stop chasing. Stop proving. Just be grounded. Now girls respond better to me and I’ve had more success in the last 3 months than the last 5 years. It’s not magic, but it definitely shifts how women see you.”</p></article>
+          </div>
+          <div class="center" style="margin-top:20px"><a class="cta" href="#checkout">Start The System Today</a></div>
+        </div>
+      </section>
+
+      <section class="section alt reveal">
+        <div class="container">
+          <div class="grid two">
+            <article class="card">
+              <h3>With This System</h3>
+              <ul class="checklist">
+                <li>You understand what actually works with women — no confusion.</li>
+                <li>You feel calm when talking, not tense or stressed.</li>
+                <li>You know how to keep conversations flowing.</li>
+                <li>Women feel comfortable around you and open up more.</li>
+                <li>You notice better responses and clearer interest.</li>
+                <li>You have clear direction and know what to focus on.</li>
+                <li>You take small, confident steps without pressure.</li>
+                <li>You feel good about yourself while talking.</li>
+                <li>You save time and effort by avoiding what doesn’t work.</li>
+                <li>You move things forward naturally without forcing.</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Without This System</h3>
+              <ul class="checklist">
+                <li>You stay confused about what works.</li>
+                <li>You feel nervous before talking even in simple moments.</li>
+                <li>Conversations die quickly and you don’t know why.</li>
+                <li>Small rejections hit hard and affect confidence.</li>
+                <li>You see little progress despite trying.</li>
+                <li>You keep overthinking before and after interactions.</li>
+                <li>You hesitate a lot, unsure of your next step.</li>
+                <li>You feel drained after talking.</li>
+                <li>You waste time on random advice that never fits.</li>
+                <li>You slowly pull back because dating feels tiring.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="container text-wrap stack">
+          <h2>Start The System Today</h2>
+          <p><strong>See if any of these match your experience:</strong></p>
+          <div class="card stack">
+            <p>? Watching girls laugh and talk with other guys while you stay unnoticed</p>
+            <p>? Seeing shorter or average looking guys get attention while you don’t</p>
+            <p>? Feeling like girls never really notice you, no matter how decent you are</p>
+            <p>? Trying to talk but getting dry or cold responses</p>
+            <p>? Feeling ignored even when you are polite and respectful</p>
+            <p>? Wondering what others have that you don’t</p>
+            <p>? Losing confidence after seeing girls choose someone else easily</p>
+            <p>? Feeling invisible in social situations with women</p>
+            <p>? Thinking you are doing something wrong but not knowing what</p>
+            <p>? Feeling stuck while others move ahead in dating</p>
+          </div>
+          <p>If this feels close to your reality, you are not alone. And more importantly, nothing is wrong with you.</p>
+          <p>Most shy men struggle not because they lack looks or confidence, but because they were never shown how attraction actually works for quiet guys.</p>
+          <p>That is exactly wht this system is built to fix.</p>
+          <p>It gives you a clear, simple way to understand what women respond to and how to show up naturally without forcing confidence or changing who you are.</p>
+        </div>
+      </section>
+
+      <section class="section alt reveal">
+        <div class="container text-wrap stack">
+          <p>Introducing</p>
+          <h2>The Quiet Attraction System</h2>
+          <p>A practical dating system built for shy men who want women to open up, enjoy talking to them, and naturally see them as attractive — without fake confidence or awkward tactics.</p>
+          <p>🧠 → 🤝 → 💬</p>
+          <h3>The Quiet Attraction System</h3>
+          <ul class="checklist">
+            <li>Understand why girls feel attracted to some men and not others</li>
+            <li>Make girls feel comfortable and interested around you</li>
+            <li>Get more attention from girls without chasing</li>
+            <li>Keep girls engaged instead of losing their interest</li>
+            <li>Know exactly what to say in the moment</li>
+            <li>Turn normal talks into attraction naturally</li>
+            <li>Know when a girl likes you and how to move ahead</li>
+            <li>Stop feeling invisible around girls</li>
+            <li>Feel calm and confident while talking to girls</li>
+            <li>Get better results with girls in real life</li>
+          </ul>
+          <a class="cta" href="#checkout">Start The System Today</a>
+        </div>
+      </section>
+
+      <section class="section reveal modules">
+        <div class="container text-wrap stack">
+          <h2>Inside the Quiet Confidence Dating System you will learn:</h2>
+          <div class="grid" style="gap:12px;">
+            <article class="card"><strong>01. Attraction Basics for Shy/Introverted Men</strong><p>See what actually makes women feel attracted in real situations instead of guessing. Loud behaviour stops feeling necessary once you understand how quiet presence, timing, and behaviour create attraction naturally.</p></article>
+            <article class="card"><strong>02. Getting the First Impression Right</strong><p>Fix the small things that decide attraction in the first few minutes. You will know how to come across in a way that makes women feel comfortable, interested, and open to continuing, instead of losing interest without knowing why.</p></article>
+            <article class="card"><strong>03. Calm Presence Women Like</strong><p>Women respond better when they feel ease around you. Nervous energy reduces without pretending to be confident, and conversations start feeling normal instead of tense.</p></article>
+            <article class="card"><strong>04. Talking Without Killing Interest</strong><p>Conversations stop feeling dry or forced. What you say keeps interest alive, so women stay engaged instead of slowly pulling away.</p></article>
+            <article class="card"><strong>05. Moving From Small Talk to Personal Talk</strong><p>Normal conversations begin shifting naturally into more personal ones. Connection builds without sudden jumps or awkward changes in topic.</p></article>
+            <article class="card"><strong>06. Making Women Feel Comfortable Around You</strong><p>Comfort becomes your strength. Women feel safe, relaxed, and okay being themselves with you, which allows attraction and closeness to grow.</p></article>
+            <article class="card"><strong>07. Knowing When a Woman Is Interested</strong><p>Interest becomes easier to read. Clear signs start making sense, and guessing or second-guessing stops controlling your actions.</p></article>
+            <article class="card"><strong>08. Avoiding the Friend Zone</strong><p>Early interactions change how women see you. Instead of being placed in a friendly role, attraction is established from the start.</p></article>
+            <article class="card"><strong>09. Keeping Interest Alive</strong><p>A good start no longer fades for no reason. Simple mistakes that usually kill attraction are avoided, and interest stays steady over time.</p></article>
+            <article class="card"><strong>10. Turning Chats Into Real Meetings</strong><p>Conversations stop getting stuck online. Meeting in person starts feeling normal and easy instead of awkward or risky.</p></article>
+            <article class="card"><strong>11. One-on-One Comfort Building</strong><p>Spending time alone feels natural instead of uncomfortable. Women feel okay staying longer and being more present with you.</p></article>
+            <article class="card"><strong>12. Physical Comfort Basics</strong><p>Closeness begins to feel smooth instead of confusing. You recognise when to move slower and avoid actions that make women pull away.</p></article>
+            <article class="card"><strong>13. Creating Romantic Tension Naturally</strong><p>Attraction shifts from friendly to romantic without lines or tricks. The dynamic changes in a way that feels natural to both sides.</p></article>
+            <article class="card"><strong>14. Dating Without Overthinking</strong><p>Attraction shifts from friendly to romantic without lines or tricks. The dynamic changes in a way that feels natural to both sides.</p></article>
+            <article class="card"><strong>15. Handling Silence and Slow Replies</strong><p>Silence stops feeling scary. Responses are handled calmly, without chasing or assuming the worst.</p></article>
+            <article class="card"><strong>16. Building Desire Without Chasing</strong><p>Running behind women no longer feels necessary. Interest grows because women feel drawn in, not because of pressure.</p></article>
+            <article class="card"><strong>17. Online and Offline Attraction Balance</strong><p>Interest stays consistent across real life and online interactions. What you do outside matches how you show up digitally.</p></article>
+            <article class="card"><strong>18. From Attraction to Girlfriend</strong><p>Attraction slowly turns into something stable. The shift from dating to commitment feels natural instead of forced or rushed.</p></article>
+            <article class="card"><strong>19. Intimacy That Feels Natural</strong><p>Closeness develops smoothly when comfort and attraction are in place. Moments happen without tension or confusion.</p></article>
+            <article class="card"><strong>20. Long-Term Results With Women</strong><p>Results stop being random. Dating feels normal and manageable instead of stressful or exhausting.</p></article>
+            <article class="card"><strong>21. Knowing When Things Are Moving Forward</strong><p>Understand when attraction is actually growing and when it is not. You stop rushing moments that need time and stop waiting when it is okay to move ahead.</p></article>
+            <article class="card"><strong>22. Knowing When to Speak and When to Hold Back</strong><p>You stop talking too much or too little at the wrong time. Moments of silence start working in your favour instead of feeling awkward.</p></article>
+          </div>
+          <a class="cta" href="#checkout">Show Me How This Works</a>
+        </div>
+      </section>
+
+      <section class="section alt reveal">
+        <div class="container text-wrap stack">
+          <h2>That’s not all. Act today to get Fast Action Bonuses for free.</h2>
+          <article class="card"><strong>BONUS 1: Photo Confidence Kit (For Normal Guys)</strong><p>This kit helps you look better in photos without posing or trying to look cool. You’ll know how to stand, where to place your hands, and how to look relaxed so your photos feel natural. It’s made for normal guys who feel awkward in pictures, not models.<br/>(Valued at ₹1,500)</p></article>
+          <article class="card"><strong>BONUS 2: Dating App Bio Fill-In Sheet</strong><p>Writing about yourself feels uncomfortable for most men. This bonus gives you a simple fill-in format where you just answer a few lines and your bio is done. No clever writing, no showing off. It helps women understand you quickly and feel curious enough to reply.<br/>(Valued at ₹2,000)</p></article>
+          <article class="card"><strong>BONUS 3: One-Message Follow-Up Formula</strong><p>After a good chat or meet, many men overthink what to say next. This bonus gives you one clean follow-up style that feels normal, respectful, and confident. It helps you stay connected without sounding needy or cold. Simple, safe, and effective.<br/>(Valued at ₹1,200)</p></article>
+          <article class="card"><strong>BONUS 4: Date Planning Made Easy Sheet</strong><p>Planning dates stresses many men out. This bonus gives you a simple structure for choosing places and plans that feel comfortable and low pressure. You’ll know what kind of plans feel easy for women and which ones make things awkward. No overplanning, no confusion.<br/>(Valued at ₹1,300)</p></article>
+          <article class="card"><strong>BONUS 5: 10-Minute Calm Reset (Audio + Text)</strong><p>When your mind feels noisy before talking or meeting, this short reset helps you slow down and feel normal again. It’s not motivation or hype. Just a calm reset you can use anytime. Many men use this before meets, calls, or opening a dating app.<br/>(Valued at ₹1,000)</p></article>
+          <p><strong>That’s ₹3,500 worth of bonuses — included free, for your commitment today</strong></p>
+          <a class="cta" href="#checkout">Start The System Today</a>
+        </div>
+      </section>
+
+      <section class="section reveal" id="checkout">
+        <div class="container text-wrap stack">
+          <h2>Everything You Get Today</h2>
+          <div class="value-table">
+            <div class="value-row"><span>Quiet Confidence Dating System (Core Program)</span><span>₹4,000</span></div>
+            <div class="value-row"><span>Attraction Basics for Shy and Introverted Men</span><span>₹1,500</span></div>
+            <div class="value-row"><span>Getting the First Impression Right</span><span>₹1,800</span></div>
+            <div class="value-row"><span>Calm Presence Women Like</span><span>₹2,000</span></div>
+            <div class="value-row"><span>Talking Without Killing Interest</span><span>₹1,200</span></div>
+            <div class="value-row"><span>Moving From Small Talk to Personal Talk</span><span>₹1,500</span></div>
+            <div class="value-row"><span>Making Women Feel Comfortable Around You</span><span>₹1,300</span></div>
+            <div class="value-row"><span>Knowing When a Woman Is Interested</span><span>₹1,200</span></div>
+            <div class="value-row"><span>Avoiding the Friend Zone</span><span>₹1,800</span></div>
+            <div class="value-row"><span>Keeping Interest Alive</span><span>₹1,500</span></div>
+            <div class="value-row"><span>Turning Chats Into Real Meetings</span><span>₹1,000</span></div>
+            <div class="value-row"><span>One-on-One Comfort Building</span><span>₹1,200</span></div>
+            <div class="value-row"><span>Physical Comfort Basics</span><span>₹1,000</span></div>
+            <div class="value-row"><span>Creating Romantic Tension Naturally</span><span>₹1,300</span></div>
+            <div class="value-row"><span>Dating Without Overthinking</span><span>₹1,000</span></div>
+            <div class="value-row"><span>Handling Silence and Slow Replies</span><span>₹1,000</span></div>
+            <div class="value-row"><span>Building Desire Without Chasing</span><span>₹1,200</span></div>
+            <div class="value-row"><span>Online and Offline Attraction Balance</span><span>₹1,000</span></div>
+            <div class="value-row"><span>From Attraction to Girlfriend</span><span>₹1,500</span></div>
+            <div class="value-row"><span>Intimacy That Feels Natural</span><span>₹1,200</span></div>
+            <div class="value-row"><span>Long-Term Results With Women</span><span>₹1,500</span></div>
+            <div class="value-row"><span>Knowing When Things Are Moving Forward</span><span>₹1,000</span></div>
+            <div class="value-row"><span>Knowing When to Speak and When to Hold Back</span><span>₹1,000</span></div>
+            <div class="value-row"><span>🎁 BONUS 1: Photo Confidence Kit (For Normal Guys)</span><span>₹1,500</span></div>
+            <div class="value-row"><span>🎁 BONUS 2: Dating App Bio Fill-In Sheet</span><span>₹1,200</span></div>
+            <div class="value-row"><span>🎁 BONUS 3: One-Message Follow-Up Formula</span><span>₹1,000</span></div>
+            <div class="value-row"><span>🎁 BONUS 4: Date Planning Made Easy Sheet</span><span>₹800</span></div>
+            <div class="value-row"><span>🎁 BONUS 5: 10-Minute Calm Reset (Text + Audio)</span><span>₹1,500</span></div>
+            <div class="value-row"><span class="total">Total Value: ₹18,000+</span><span class="total">Today Only: ₹499</span></div>
+          </div>
+          <p>Limited Time Access</p>
+          <a class="cta" href="#">Show Me How This Works</a>
+        </div>
+      </section>
+
+      <section class="section alt reveal">
+        <div class="container text-wrap stack">
+          <h2>Imagine this…</h2>
+          <h3>Just one week from today…</h3>
+          <p>One week from now<br/>You talk without your chest feeling tight. Words come out normally.</p>
+          <p>You do not replay conversations in your head anymore. You say something and move on.</p>
+          <p>Women reply properly. Not one-word answers. Not silence.</p>
+          <p>You notice small signs you missed before. Interest feels clearer.</p>
+          <p>You stop wondering what to say next. You already know.</p>
+          <p>For the first time, dating does not feel confusing. It feels simple.</p>
+          <p>You realise something important. This is not luck. You’re finally doing it the right way.</p>
+
+          <h3>Just one month from now…</h3>
+          <p>You feel normal around women. No rush in your head. No tight feeling.</p>
+          <p>Conversations do not stall anymore. They move somewhere.</p>
+          <p>You can tell when she is interested. You do not guess. You do not hope.</p>
+          <p>You talk, you meet, things progress. Not every time, but often enough to know it works.</p>
+          <p>Women who once felt out of reach now feel possible. Some even show interest first.</p>
+          <p>Dating stops feeling confusing. You understand what to do and when to do it.</p>
+          <p>It no longer feels like luck. It feels like a skill you are learning and using.</p>
+
+          <h3>3 months down the line...</h3>
+          <p>You feel comfortable in your own skin. You do not try to impress.</p>
+          <p>When you speak, women pay attention. They listen. They stay.</p>
+          <p>You know when interest is real. You do not chase guesses anymore.</p>
+          <p>You have choices now. You are not stuck on one option.</p>
+          <p>Some conversations fade. Others move forward easily. And you know why.</p>
+          <p>Dating feels normal. Not stressful. Not confusing.</p>
+          <p>This is not luck. You understand attraction now, and it shows.</p>
+          <a class="cta" href="#checkout">Show Me How This Works</a>
+        </div>
+      </section>
+
+      <section class="section reveal faq">
+        <div class="container text-wrap stack">
+          <h2>Got questions? We’ve got answers.</h2>
+          <details><summary>01. Is this system really made for shy men?</summary><p>Yes. This system is designed specifically for shy, quiet, and overthinking men who struggle with dating.</p></details>
+          <details><summary>02. Do I need to be confident already for this to work?</summary><p>No. You don’t need confidence to start. The system helps you build calm confidence naturally over time.</p></details>
+          <details><summary>03. Will this help me talk to women without freezing?</summary><p>Yes. You’ll learn how to stay relaxed in conversations so your mind doesn’t go blank.</p></details>
+          <details><summary>04. Is this about pickup lines or scripted conversations?</summary><p>No. There are no pickup lines or fake scripts. Everything is based on real, natural interactions.</p></details>
+          <details><summary>05. Can this help if women usually ignore me?</summary><p>Yes. You’ll understand why that happens and how to change the way women respond to you.</p></details>
+          <details><summary>06. How fast can I expect to see results?</summary><p>Many men notice better reactions within the first week when they start applying the system.</p></details>
+          <details><summary>07. How can I access the bonuses mentioned?</summary><p>These bonuses are included only for those who take action today. Once you get access, they unlock instantly along with the main system.</p></details>
+          <details><summary>08. Are the bonuses separate or part of the system?</summary><p>The bonuses are extra tools that work alongside the main system to improve your results.</p></details>
+          <details><summary>09. Is this suitable for Indian dating situations?</summary><p>Yes. The system is created keeping Indian social settings and real dating situations in mind.</p></details>
+          <details><summary>10. Who should not buy this system?</summary><p>This is not for anyone looking for tricks, shortcuts, fake confidence methods, or those who don't want to take action but want results without any action.</p></details>
+        </div>
+      </section>
+
+      <section class="section alt reveal center">
+        <div class="container text-wrap stack">
+          <h2>Start Getting Results With Women Today</h2>
+          <a class="cta" href="#checkout">Start The System Today</a>
+        </div>
+      </section>
+    </main>
+
+    <div class="sticky"><a class="cta" href="#checkout">Start The System Today • ₹499</a></div>
+
+    <script>
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+    </script>
+  </body>
+</html>
